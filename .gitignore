@@ -1,0 +1,4 @@
+*.jar
+*.jardesc
+bin
+.settings
