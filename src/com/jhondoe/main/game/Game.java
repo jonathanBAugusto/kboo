@@ -1,8 +1,11 @@
 package com.jhondoe.main.game;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -10,12 +13,15 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import com.jhondoe.common.F;
 import com.jhondoe.entities.Entity;
 import com.jhondoe.entities.bullet.Bullet;
 import com.jhondoe.entities.enemy.Enemy;
 import com.jhondoe.entities.player.Player;
+import com.jhondoe.enums.GameState;
 import com.jhondoe.graphics.Spritesheet;
 import com.jhondoe.graphics.UI;
+import com.jhondoe.main.menu.Menu;
 import com.jhondoe.tiles.Tile;
 import com.jhondoe.world.World;
 
@@ -50,10 +56,11 @@ public class Game extends GameListener {
 		playerSheetRunner = new Spritesheet("/playersheetrunner.png");
 		enemySheet = new Spritesheet("/enemy1.png");
 
+		menu = new Menu();
 		player = new Player(0, 0, Tile.WIDTH, Tile.HEIGHT, playerSheet.getSprite(0, 48, Tile.WIDTH, Tile.HEIGHT));
 		gameUi = new UI();
 		entities.add(player);
-		world = new World("/map200.png");
+		world = new World("/map" + (currentLevel + 1) + ".png");
 	}
 
 	public void initFrame() {
@@ -81,7 +88,7 @@ public class Game extends GameListener {
 		}
 	}
 
-	public void update() {
+	private void updateNormal() {
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.update();
@@ -89,6 +96,64 @@ public class Game extends GameListener {
 		for (int i = 0; i < bullets.size(); i++) {
 			Bullet b = bullets.get(i);
 			b.update();
+		}
+
+		if (enemies.size() == 0) {
+			sumCurrentLevel(1);
+			if (getCurrentLevel() >= maxLevel) {
+				setCurrentLevel(0);
+			}
+			initEntities();
+			return;
+		}
+	}
+
+	private void updateGameOver() {
+		framesGameOver++;
+		if (framesGameOver >= maxFramesGameOver) {
+			framesGameOver = 0;
+			toggleShowMessageGameOver();
+		}
+
+		if (Game.player.isEnter()) {
+			setCurrentLevel(0);
+			setGameState(GameState.PLAY);
+			initEntities();
+		}
+	}
+
+	private void checkStatusGame(Graphics g) {
+		switch (getGameState()) {
+			case GAME_OVER:
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setColor(new Color(0, 0, 0, 100));
+				g2d.fillRect(0, 0, getWidth() * SCALE, getHeight() * SCALE);
+
+				F.drawCenteredFontBold(g, "GAME OVER", 80, Color.white, 0, -40);
+				if (isShowMessageGameOver()) {
+					F.drawCenteredFontBold(g, ">>>Press Enter to try again...<<<", 30, Color.white, 0, 60);
+				}
+				break;
+			case MENU:
+				menu.render(g);
+				break;
+			case PLAY:
+				break;
+			default:
+				break;
+
+		}
+	}
+
+	public void update() {
+		switch (getGameState()) {
+			case PLAY:
+				updateNormal();
+			case GAME_OVER:
+				updateGameOver();
+			case MENU:
+				menu.update();
+				break;
 		}
 	}
 
@@ -105,19 +170,22 @@ public class Game extends GameListener {
 
 		/* Game Render */
 		world.render(g);
-		for (int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
-			e.render(g);
-		}
-		for (int i = 0; i < bullets.size(); i++) {
-			Bullet b = bullets.get(i);
-			b.render(g);
+		if (getGameState().equals(GameState.PLAY) || getGameState().equals(GameState.GAME_OVER)) {
+			for (int i = 0; i < entities.size(); i++) {
+				Entity e = entities.get(i);
+				e.render(g);
+			}
+			for (int i = 0; i < bullets.size(); i++) {
+				Bullet b = bullets.get(i);
+				b.render(g);
+			}
 		}
 		/*****/
 		gameUi.render(g);
 		g.dispose();
 		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		checkStatusGame(g);
 		bs.show();
 	}
 

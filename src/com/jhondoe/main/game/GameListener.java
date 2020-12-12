@@ -5,6 +5,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import com.jhondoe.enums.GameState;
+
 public class GameListener extends GameCore implements Runnable, KeyListener, MouseListener {
 
     /**
@@ -57,6 +59,13 @@ public class GameListener extends GameCore implements Runnable, KeyListener, Mou
     }
 
     private void executeKey(KeyEvent e, boolean pressed) {
+        executeKey(e, pressed, false);
+    }
+
+    private void executeKey(KeyEvent e, boolean pressed, boolean ignore) {
+        if (ignore) {
+            return;
+        }
 
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
             Game.player.setShift(pressed);
@@ -66,25 +75,53 @@ public class GameListener extends GameCore implements Runnable, KeyListener, Mou
             Game.player.setShoot(pressed);
         }
 
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (getGameState().equals(GameState.MENU)) {
+                Game.menu.setEnter(pressed);
+            }
+            if (getGameState().equals(GameState.PLAY)) {
+                Game.player.setEnter(pressed);
+            }
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            setGameState(GameState.MENU);
+            Game.menu.setPause(true);
+        }
+
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A:
-                Game.player.setLeft(pressed);
+                if (getGameState().equals(GameState.PLAY)) {
+                    Game.player.setLeft(pressed);
+                }
                 break;
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D:
-                Game.player.setRight(pressed);
+                if (getGameState().equals(GameState.PLAY)) {
+                    Game.player.setRight(pressed);
+                }
                 break;
         }
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_W:
-                Game.player.setUp(pressed);
+                if (getGameState().equals(GameState.MENU)) {
+                    Game.menu.setUp(pressed);
+                }
+                if (getGameState().equals(GameState.PLAY)) {
+                    Game.player.setUp(pressed);
+                }
                 break;
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_S:
-                Game.player.setDown(pressed);
+                if (getGameState().equals(GameState.MENU)) {
+                    Game.menu.setDown(pressed);
+                }
+                if (getGameState().equals(GameState.PLAY)) {
+                    Game.player.setDown(pressed);
+                }
                 break;
         }
     }

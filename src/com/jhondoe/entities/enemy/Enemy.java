@@ -86,7 +86,7 @@ public class Enemy extends EnemySprites {
             if (hitFrame >= MAXHITFRAMES) {
                 hitFrame = 0;
                 if (Game.rand.nextInt(100) > 20) {
-                    int damage = Game.rand.nextInt(10) + 1;
+                    int damage = Game.rand.nextInt(maxHitDamage) + 1;
                     if (Game.player.getStamina() > 0) {
                         if (Game.player.getStamina() >= damage) {
                             int newDamage = Game.rand.nextInt(damage) + 1;
