@@ -12,7 +12,8 @@ import com.jhondoe.world.Camera;
 
 public class PlayerCore extends Entity {
 
-    protected boolean left, right, up, down, shift, shoot = false, mouseShoot = false, moved = false, damaged = false;
+    protected boolean left, right, up, down, shift, enter, shoot = false, mouseShoot = false, moved = false,
+            damaged = false;
 
     protected int mouseX, mouseY, lastMouseX = 0, lastMouseY = 0;
 
@@ -209,5 +210,13 @@ public class PlayerCore extends Entity {
             lastMouseDir = Dir.UP;
         }
         return lastMouseDir;
+    }
+
+    public boolean isEnter() {
+        return enter;
+    }
+
+    public void setEnter(boolean enter) {
+        this.enter = enter;
     }
 }

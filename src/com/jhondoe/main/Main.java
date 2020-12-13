@@ -6,8 +6,12 @@ public class Main {
     public static Game game;
 
     public static void main(String args[]) {
-        game = new Game();
-        game.start();
+        try {
+            game = new Game();
+            game.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

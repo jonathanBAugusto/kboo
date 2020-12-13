@@ -12,8 +12,10 @@ import com.jhondoe.entities.Entity;
 import com.jhondoe.entities.bullet.Bullet;
 import com.jhondoe.entities.enemy.Enemy;
 import com.jhondoe.entities.player.Player;
+import com.jhondoe.enums.GameState;
 import com.jhondoe.graphics.Spritesheet;
 import com.jhondoe.graphics.UI;
+import com.jhondoe.main.menu.Menu;
 import com.jhondoe.world.World;
 
 public class GameCore extends Canvas {
@@ -27,14 +29,20 @@ public class GameCore extends Canvas {
     public static final int SCALE = 4;
 
     protected BufferedImage image;
+    protected GameState gameState = GameState.MENU;
+    protected boolean showMessageGameOver = false;
 
-    public static final double FPS = 30.0;
+    protected int currentLevel = 0, maxLevel = 3, framesGameOver = 0, maxFramesGameOver = 30;
+    public static int CURRENT_LEVEL = 0;
+
+    public static final double FPS = 60.0;
     public static int nowFps = 0;
 
     public static List<Entity> entities;
     public static List<Enemy> enemies;
     public static List<Bullet> bullets;
 
+    public static Menu menu;
     public static Player player;
     public static UI gameUi;
 
@@ -52,5 +60,51 @@ public class GameCore extends Canvas {
 
     public int getHeight() {
         return HEIGHT * SCALE;
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+        CURRENT_LEVEL = currentLevel;
+    }
+
+    public void sumCurrentLevel(int sumValue) {
+        currentLevel += sumValue;
+        CURRENT_LEVEL = currentLevel;
+    }
+
+    public boolean isShowMessageGameOver() {
+        return showMessageGameOver;
+    }
+
+    public void toggleShowMessageGameOver() {
+        this.showMessageGameOver = !this.showMessageGameOver;
+    }
+
+    public void setShowMessageGameOver(boolean showMessageGameOver) {
+        this.showMessageGameOver = showMessageGameOver;
+    }
+
+    public int getFramesGameOver() {
+        return framesGameOver;
+    }
+
+    public void setFramesGameOver(int framesGameOver) {
+        this.framesGameOver = framesGameOver;
+    }
+
+    public void sumFramesGameOver(int sumValue) {
+        this.framesGameOver += sumValue;
     }
 }

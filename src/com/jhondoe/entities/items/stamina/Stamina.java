@@ -6,6 +6,7 @@ import com.jhondoe.common.F;
 import com.jhondoe.entities.Entity;
 import com.jhondoe.entities.items.Items;
 import com.jhondoe.main.game.Game;
+import com.jhondoe.main.sound.Sound;
 import com.jhondoe.tiles.Tile;
 
 public class Stamina extends Items {
@@ -31,6 +32,7 @@ public class Stamina extends Items {
             Entity ent = Game.entities.get(i);
             if (ent instanceof Stamina) {
                 if (F.isColliding(entity, ent)) {
+                    Sound.powerUp.play();
                     Game.player.addStamina(amountStamina);
                     Game.entities.remove(ent);
                     return;

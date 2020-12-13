@@ -8,6 +8,8 @@ import com.jhondoe.entities.items.life_up.LifeUp;
 import com.jhondoe.entities.items.power_ammo.PowerAmmo;
 import com.jhondoe.entities.items.stamina.Stamina;
 import com.jhondoe.enums.Dir;
+import com.jhondoe.enums.GameState;
+import com.jhondoe.main.Main;
 import com.jhondoe.main.game.Game;
 import com.jhondoe.tiles.Tile;
 import com.jhondoe.world.Camera;
@@ -93,12 +95,11 @@ public class Player extends PlayerColiders {
 		LifeUp.checkCollision(this);
 		Stamina.checkCollision(this);
 
-		checkShoot();
+		// checkShoot();
 		checkMouseShoot();
 
 		if (this.life <= 0) {
-			// Main.game.initEntities();
-			// return;
+			Main.game.setGameState(GameState.GAME_OVER);
 		}
 
 		Camera.setX(Camera.clamp((int) getX() - (Game.WIDTH / 2), 0, (World.WIDTH * Tile.WIDTH) - Game.WIDTH));
