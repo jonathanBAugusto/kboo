@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import com.jhondoe.enums.GameState;
+import com.jhondoe.main.sound.Sound;
 
 public class GameListener extends GameCore implements Runnable, KeyListener, MouseListener {
 
@@ -79,14 +80,17 @@ public class GameListener extends GameCore implements Runnable, KeyListener, Mou
             if (getGameState().equals(GameState.MENU)) {
                 Game.menu.setEnter(pressed);
             }
-            if (getGameState().equals(GameState.PLAY)) {
+            if (getGameState().equals(GameState.PLAY) || getGameState().equals(GameState.GAME_OVER)) {
                 Game.player.setEnter(pressed);
             }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             setGameState(GameState.MENU);
-            Game.menu.setPause(true);
+            if (!Game.menu.isPause()) {
+                Sound.background.stop();
+                Game.menu.setPause(true);
+            }
         }
 
         switch (e.getKeyCode()) {

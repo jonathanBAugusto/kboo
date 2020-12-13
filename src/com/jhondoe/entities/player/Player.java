@@ -95,7 +95,7 @@ public class Player extends PlayerColiders {
 		LifeUp.checkCollision(this);
 		Stamina.checkCollision(this);
 
-		checkShoot();
+		// checkShoot();
 		checkMouseShoot();
 
 		if (this.life <= 0) {

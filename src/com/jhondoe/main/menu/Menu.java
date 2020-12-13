@@ -12,6 +12,7 @@ import com.jhondoe.common.F;
 import com.jhondoe.enums.GameState;
 import com.jhondoe.main.Main;
 import com.jhondoe.main.game.Game;
+import com.jhondoe.main.sound.Sound;
 import com.jhondoe.tiles.Tile;
 
 public class Menu {
@@ -46,6 +47,7 @@ public class Menu {
                     Main.game.setCurrentLevel(0);
                 }
                 Main.game.setGameState(GameState.PLAY);
+                Sound.background.loop();
                 pause = false;
                 break;
             case 1:
@@ -54,6 +56,7 @@ public class Menu {
                     Main.game.initEntities();
                 }
                 Main.game.setGameState(GameState.PLAY);
+                Sound.background.loop();
                 pause = false;
                 break;
             case 2:
@@ -65,10 +68,13 @@ public class Menu {
 
     public void update() {
         if (up) {
+            Sound.menuItem.play();
             upMenu();
         } else if (down) {
+            Sound.menuItem.play();
             downMenu();
         } else if (enter) {
+            Sound.menuEnter.play();
             enterMenu();
         }
 

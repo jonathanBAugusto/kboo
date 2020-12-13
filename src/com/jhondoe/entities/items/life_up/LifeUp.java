@@ -6,6 +6,7 @@ import com.jhondoe.common.F;
 import com.jhondoe.entities.Entity;
 import com.jhondoe.entities.items.Items;
 import com.jhondoe.main.game.Game;
+import com.jhondoe.main.sound.Sound;
 import com.jhondoe.tiles.Tile;
 
 public class LifeUp extends Items {
@@ -30,6 +31,7 @@ public class LifeUp extends Items {
             Entity ent = Game.entities.get(i);
             if (ent instanceof LifeUp) {
                 if (F.isColliding(entity, ent)) {
+                    Sound.powerUp.play();
                     Game.player.maxLife += amountLifeUp;
                     Game.player.life += amountLifeUp;
                     Game.entities.remove(ent);

@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 
 import com.jhondoe.enums.Dir;
 import com.jhondoe.main.game.Game;
+import com.jhondoe.main.sound.Sound;
 import com.jhondoe.world.World;
 
 public class Enemy extends EnemySprites {
@@ -83,6 +84,7 @@ public class Enemy extends EnemySprites {
                 y -= speed;
             }
         } else {
+            Sound.hurt.play();
             if (hitFrame >= MAXHITFRAMES) {
                 hitFrame = 0;
                 if (Game.rand.nextInt(100) > 20) {

@@ -6,6 +6,7 @@ import com.jhondoe.common.F;
 import com.jhondoe.entities.Entity;
 import com.jhondoe.entities.enemy.Enemy;
 import com.jhondoe.main.game.Game;
+import com.jhondoe.main.sound.Sound;
 import com.jhondoe.tiles.Tile;
 
 import java.awt.Color;
@@ -56,6 +57,7 @@ public class Bullet extends Entity {
         for (int i = 0; i < Game.enemies.size(); i++) {
             Enemy enemy = Game.enemies.get(i);
             if (F.isColliding(this, enemy)) {
+                Sound.hitBullet.play();
                 enemy.subLife(getDamage());
                 enemy.setDamaged(true);
                 Game.bullets.remove(this);

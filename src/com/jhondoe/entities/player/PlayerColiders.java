@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 import com.jhondoe.entities.bullet.Bullet;
 import com.jhondoe.main.game.Game;
+import com.jhondoe.main.sound.Sound;
 import com.jhondoe.tiles.Tile;
 import com.jhondoe.world.Camera;
 
@@ -18,6 +19,7 @@ public class PlayerColiders extends PlayerSprites {
         if (!isMouseShoot() || powerAmmo <= 0) {
             return;
         }
+        Sound.fireBullet.play();
         setMouseShoot(false);
         double y = mouseY - (getY() + (Tile.HEIGHT / 2) - Camera.getY());
         double x = mouseX - (getX() + (Tile.WIDTH / 2) - Camera.getX());
@@ -38,7 +40,7 @@ public class PlayerColiders extends PlayerSprites {
         if (!isShoot() || powerAmmo <= 0) {
             return;
         }
-
+        Sound.fireBullet.play();
         setShoot(false);
         int dx = 0;
         int dy = 0;
