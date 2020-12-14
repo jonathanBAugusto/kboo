@@ -30,7 +30,7 @@ public class LifeUp extends Items {
         for (int i = 0; i < Game.entities.size(); i++) {
             Entity ent = Game.entities.get(i);
             if (ent instanceof LifeUp) {
-                if (F.isColliding(entity, ent)) {
+                if (F.isColliding(entity, ent, true)) {
                     Sound.powerUp.play();
                     Game.player.maxLife += amountLifeUp;
                     Game.player.life += amountLifeUp;

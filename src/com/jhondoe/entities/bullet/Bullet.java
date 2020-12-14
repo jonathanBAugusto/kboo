@@ -56,7 +56,7 @@ public class Bullet extends Entity {
     public void isColliding() {
         for (int i = 0; i < Game.enemies.size(); i++) {
             Enemy enemy = Game.enemies.get(i);
-            if (F.isColliding(this, enemy)) {
+            if (F.isColliding(this, enemy, true)) {
                 Sound.hitBullet.play();
                 enemy.subLife(getDamage());
                 enemy.setDamaged(true);

@@ -17,6 +17,9 @@ public class GameListener extends GameCore implements Runnable, KeyListener, Mou
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE && !Game.player.isJumping()) {
+            Game.player.setJump(true);
+        }
         executeKey(e, true);
     }
 

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import com.jhondoe.common.F;
 import com.jhondoe.enums.Dir;
 import com.jhondoe.main.game.Game;
 import com.jhondoe.main.sound.Sound;
@@ -58,33 +59,32 @@ public class Enemy extends EnemySprites {
         moved = false;
         frames++;
         hitFrame++;
-        if (!isCollidingPlayer()) {
-            if (x < Game.player.getX() && World.isFree((int) (x + speed), (int) y)
+        if (!F.isColliding(this, Game.player, true)) {
+            if (x < Game.player.getX() && World.isFree((int) (x + speed), (int) y, false)
                     && !isColliding((int) (x + speed), (int) y)) {
                 moved = true;
                 last_dir = Dir.RIGHT;
                 x += speed;
             }
-            if (x > Game.player.getX() && World.isFree((int) (x - speed), (int) y)
+            if (x > Game.player.getX() && World.isFree((int) (x - speed), (int) y, false)
                     && !isColliding((int) (x - speed), (int) y)) {
                 moved = true;
                 last_dir = Dir.LEFT;
                 x -= speed;
             }
-            if (y < Game.player.getY() && World.isFree((int) x, (int) (y + speed))
+            if (y < Game.player.getY() && World.isFree((int) x, (int) (y + speed), false)
                     && !isColliding((int) x, (int) (y + speed))) {
                 moved = true;
                 last_dir = Dir.DOWN;
                 y += speed;
             }
-            if (y > Game.player.getY() && World.isFree((int) x, (int) (y - speed))
+            if (y > Game.player.getY() && World.isFree((int) x, (int) (y - speed), false)
                     && !isColliding((int) x, (int) (y - speed))) {
                 moved = true;
                 last_dir = Dir.UP;
                 y -= speed;
             }
         } else {
-            Sound.hurt.play();
             if (hitFrame >= MAXHITFRAMES) {
                 hitFrame = 0;
                 if (Game.rand.nextInt(100) > 20) {
@@ -106,6 +106,7 @@ public class Enemy extends EnemySprites {
                     } else {
                         Game.player.life -= damage;
                     }
+                    Sound.hurt.play();
                     Game.player.setDamaged(true);
                 }
             }
@@ -140,11 +141,6 @@ public class Enemy extends EnemySprites {
             selfDestruct();
             return;
         }
-    }
-
-    private boolean isCollidingPlayer() {
-        return new Rectangle((int) (getX() + maskX), (int) (getY() + maskY), maskW, maskH)
-                .intersects(Game.player.getRectangle());
     }
 
     private void selfDestruct() {

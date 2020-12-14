@@ -10,6 +10,7 @@ import com.jhondoe.world.Camera;
 public class Entity {
 	protected double x;
 	protected double y;
+	protected double z;
 	protected int width;
 	protected int height;
 	protected BufferedImage sprite;
@@ -71,6 +72,14 @@ public class Entity {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public double getZ() {
+		return z;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
 	}
 
 	public int getWidth() {
