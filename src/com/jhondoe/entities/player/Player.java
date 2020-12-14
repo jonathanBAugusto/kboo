@@ -23,7 +23,37 @@ public class Player extends PlayerColiders {
 		initSprites();
 	}
 
+	private void checkJump() {
+		if (jump) {
+			if (!isJumping) {
+				jump = false;
+				isJumping = true;
+				jumpUp = true;
+			}
+
+		}
+		if (isJumping) {
+			if (jumpUp) {
+				jumpFrames += jumpSpeed;
+			} else if (jumpDown) {
+				jumpFrames -= jumpSpeed;
+				if (jumpFrames <= 0) {
+					jumpUp = false;
+					jumpDown = false;
+					isJumping = false;
+				}
+			}
+			setZ(jumpFrames);
+			if (jumpFrames >= jumpMaxFrames) {
+				jumpUp = false;
+				jumpDown = true;
+			}
+		}
+	}
+
 	public void update() {
+		checkJump();
+
 		double customSpeed = speed;
 		moved = false;
 		frames++;
@@ -34,22 +64,22 @@ public class Player extends PlayerColiders {
 			}
 		}
 
-		if (left && World.isFree((int) (x - customSpeed), (int) y)) {
+		if (left && World.isFree((int) (x - customSpeed), (int) y, (isJumping))) {
 			moved = true;
 			last_dir = Dir.LEFT;
 			x -= customSpeed;
 		}
-		if (right && World.isFree((int) (x + customSpeed), (int) y)) {
+		if (right && World.isFree((int) (x + customSpeed), (int) y, (isJumping))) {
 			moved = true;
 			last_dir = Dir.RIGHT;
 			x += customSpeed;
 		}
-		if (up && World.isFree((int) x, (int) (y - customSpeed))) {
+		if (up && World.isFree((int) x, (int) (y - customSpeed), (isJumping))) {
 			moved = true;
 			last_dir = Dir.UP;
 			y -= customSpeed;
 		}
-		if (down && World.isFree((int) x, (int) (y + customSpeed))) {
+		if (down && World.isFree((int) x, (int) (y + customSpeed), (isJumping))) {
 			moved = true;
 			last_dir = Dir.DOWN;
 			y += customSpeed;
@@ -107,7 +137,6 @@ public class Player extends PlayerColiders {
 	}
 
 	public void render(Graphics g) {
-		// animate(g, last_dir);
 		animateMouse(g);
 	}
 }

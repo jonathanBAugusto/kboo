@@ -72,10 +72,17 @@ public class World {
     }
 
     public static boolean isFree(int xNext, int yNext) {
-        return isFree(xNext, yNext, Tile.WIDTH, Tile.HEIGHT);
+        return isFree(xNext, yNext, false);
     }
 
-    public static boolean isFree(int xNext, int yNext, int tileW, int tileH) {
+    public static boolean isFree(int xNext, int yNext, boolean ignore) {
+        return isFree(xNext, yNext, Tile.WIDTH, Tile.HEIGHT, ignore);
+    }
+
+    public static boolean isFree(int xNext, int yNext, int tileW, int tileH, boolean ignore) {
+        if (ignore) {
+            return true;
+        }
         int x1 = xNext / tileW;
         int y1 = yNext / tileH;
 
@@ -87,7 +94,6 @@ public class World {
 
         int x4 = (xNext + (tileW - 1)) / tileW;
         int y4 = (yNext + (tileH - 1)) / tileH;
-
         return !((tiles[x1 + (y1 * World.WIDTH)] instanceof WallTile)
                 || (tiles[x2 + (y2 * World.WIDTH)] instanceof WallTile)
                 || (tiles[x3 + (y3 * World.WIDTH)] instanceof WallTile)

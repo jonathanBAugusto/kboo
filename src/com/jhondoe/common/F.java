@@ -14,12 +14,17 @@ import com.jhondoe.main.Main;
 public class F {
         public static final int DRAW_CENTERED_FONT_IGNORE_XY = -999;
 
-        public static boolean isColliding(Entity e1, Entity e2) {
+        public static boolean isColliding(Entity e1, Entity e2, boolean player) {
                 Rectangle e1Mask = new Rectangle((int) e1.getX() + e1.getMaskX(), (int) e1.getY() + e1.getMaskY(),
                                 e1.getMaskW(), e1.getMaskH());
                 Rectangle e2Mask = new Rectangle((int) e2.getX() + e2.getMaskX(), (int) e2.getY() + e2.getMaskY(),
                                 e2.getMaskW(), e2.getMaskH());
-
+                if (player) {
+                        if (e1Mask.intersects(e2Mask) && e1.getZ() == e2.getZ()) {
+                                return true;
+                        }
+                        return false;
+                }
                 return e1Mask.intersects(e2Mask);
         }
 

@@ -13,7 +13,7 @@ import com.jhondoe.world.Camera;
 public class PlayerCore extends Entity {
 
     protected boolean left, right, up, down, shift, enter, shoot = false, mouseShoot = false, moved = false,
-            damaged = false;
+            damaged = false, jump = false, isJumping = false, jumpUp = false, jumpDown = false;
 
     protected int mouseX, mouseY, lastMouseX = 0, lastMouseY = 0;
 
@@ -22,7 +22,7 @@ public class PlayerCore extends Entity {
     protected int stamina = 0, powerAmmo = 0;
 
     protected int frames = 0, staminaFrames = 0, maxFrames = 20, index = 0, maxIndex = 7, stoppedIndex = 0,
-            stoppedMaxIndex = 1, runnerIndex = 0, runnerMaxIndex = 7;
+            stoppedMaxIndex = 1, runnerIndex = 0, runnerMaxIndex = 7, jumpFrames = 0, jumpMaxFrames = 30, jumpSpeed = 1;
 
     protected double speed = 1.2, shiftSpeed = 1.5;
 
@@ -218,5 +218,21 @@ public class PlayerCore extends Entity {
 
     public void setEnter(boolean enter) {
         this.enter = enter;
+    }
+
+    public boolean isJump() {
+        return jump;
+    }
+
+    public void setJump(boolean jump) {
+        this.jump = jump;
+    }
+
+    public boolean isJumping() {
+        return isJumping;
+    }
+
+    public void setJumping(boolean isJumping) {
+        this.isJumping = isJumping;
     }
 }

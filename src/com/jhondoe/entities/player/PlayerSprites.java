@@ -1,7 +1,9 @@
 package com.jhondoe.entities.player;
 
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import com.jhondoe.entities.Entity;
 import com.jhondoe.enums.Dir;
@@ -80,7 +82,7 @@ public class PlayerSprites extends PlayerCore {
     }
 
     protected void drawSprite(Graphics g, BufferedImage sprite) {
-        g.drawImage(sprite, (int) getXCamera(), (int) getYCamera(), null);
+        g.drawImage(sprite, (int) getXCamera(), (int) (getYCamera() - z), null);
     }
 
     protected void animateMouse(Graphics g) {
@@ -169,6 +171,13 @@ public class PlayerSprites extends PlayerCore {
                 }
                 break;
         }
+        if (isJumping) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setColor(new Color(0, 0, 0, 110));
+            g2d.fillOval((int) (getXCamera() + ((Game.player.getWidth() / 2) * 0.5)),
+                    (int) getYCamera() + (Game.player.getHeight() / 2), 10, 7);
+        }
+        System.out.println("Z: " + getZ());
     }
 
 }

@@ -29,7 +29,7 @@ public class PlayerColiders extends PlayerSprites {
         int customX = 8;
         int customY = 8;
 
-        Game.bullets.add(new Bullet(getX() + customX, getY() + customY, 3, 3, null, dx, dy));
+        Game.bullets.add(new Bullet(getX() + customX, getY() + customY - z, 3, 3, null, dx, dy));
 
         if (powerAmmo > 0) {
             powerAmmo--;

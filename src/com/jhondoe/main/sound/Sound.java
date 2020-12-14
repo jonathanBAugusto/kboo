@@ -33,6 +33,9 @@ public class Sound {
     }
 
     public Sound(String file) {
+        if (true) {
+            return;
+        }
         this.filePath += file;
         try {
             clip = AudioSystem.getClip(null);
