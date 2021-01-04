@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 import com.jhondoe.common.F;
 import com.jhondoe.enums.Dir;
-import com.jhondoe.main.game.Game;
+import com.jhondoe.main.game.GameCore;
 import com.jhondoe.main.sound.Sound;
 import com.jhondoe.world.World;
 
@@ -59,55 +59,58 @@ public class Enemy extends EnemySprites {
         moved = false;
         frames++;
         hitFrame++;
-        if (!F.isColliding(this, Game.player, true)) {
-            if (x < Game.player.getX() && World.isFree((int) (x + speed), (int) y, false)
-                    && !isColliding((int) (x + speed), (int) y)) {
-                moved = true;
-                last_dir = Dir.RIGHT;
-                x += speed;
-            }
-            if (x > Game.player.getX() && World.isFree((int) (x - speed), (int) y, false)
-                    && !isColliding((int) (x - speed), (int) y)) {
-                moved = true;
-                last_dir = Dir.LEFT;
-                x -= speed;
-            }
-            if (y < Game.player.getY() && World.isFree((int) x, (int) (y + speed), false)
-                    && !isColliding((int) x, (int) (y + speed))) {
-                moved = true;
-                last_dir = Dir.DOWN;
-                y += speed;
-            }
-            if (y > Game.player.getY() && World.isFree((int) x, (int) (y - speed), false)
-                    && !isColliding((int) x, (int) (y - speed))) {
-                moved = true;
-                last_dir = Dir.UP;
-                y -= speed;
-            }
-        } else {
-            if (hitFrame >= MAXHITFRAMES) {
-                hitFrame = 0;
-                if (Game.rand.nextInt(100) > 20) {
-                    int damage = Game.rand.nextInt(maxHitDamage) + 1;
-                    if (Game.player.getStamina() > 0) {
-                        if (Game.player.getStamina() >= damage) {
-                            int newDamage = Game.rand.nextInt(damage) + 1;
-                            Game.player.subStamina(newDamage);
-                            damage -= newDamage;
-                        } else {
-                            int newStamina = Game.rand.nextInt(Game.player.getStamina());
-                            int diff = damage - newStamina;
-                            Game.player.subStamina(newStamina);
-                            damage -= diff;
+
+        if (calculeDistance(this.getX(), this.getY(), GameCore.player.getX(), GameCore.player.getY()) < 100) {
+            if (!F.isColliding(this, GameCore.player, true)) {
+                if (x < GameCore.player.getX() && World.isFree((int) (x + speed), (int) y, false)
+                        && !isColliding((int) (x + speed), (int) y)) {
+                    moved = true;
+                    last_dir = Dir.RIGHT;
+                    x += speed;
+                }
+                if (x > GameCore.player.getX() && World.isFree((int) (x - speed), (int) y, false)
+                        && !isColliding((int) (x - speed), (int) y)) {
+                    moved = true;
+                    last_dir = Dir.LEFT;
+                    x -= speed;
+                }
+                if (y < GameCore.player.getY() && World.isFree((int) x, (int) (y + speed), false)
+                        && !isColliding((int) x, (int) (y + speed))) {
+                    moved = true;
+                    last_dir = Dir.DOWN;
+                    y += speed;
+                }
+                if (y > GameCore.player.getY() && World.isFree((int) x, (int) (y - speed), false)
+                        && !isColliding((int) x, (int) (y - speed))) {
+                    moved = true;
+                    last_dir = Dir.UP;
+                    y -= speed;
+                }
+            } else {
+                if (hitFrame >= MAXHITFRAMES) {
+                    hitFrame = 0;
+                    if (GameCore.rand.nextInt(100) > 20) {
+                        int damage = GameCore.rand.nextInt(maxHitDamage) + 1;
+                        if (GameCore.player.getStamina() > 0) {
+                            if (GameCore.player.getStamina() >= damage) {
+                                int newDamage = GameCore.rand.nextInt(damage) + 1;
+                                GameCore.player.subStamina(newDamage);
+                                damage -= newDamage;
+                            } else {
+                                int newStamina = GameCore.rand.nextInt(GameCore.player.getStamina());
+                                int diff = damage - newStamina;
+                                GameCore.player.subStamina(newStamina);
+                                damage -= diff;
+                            }
                         }
+                        if ((GameCore.player.life - damage) <= 0) {
+                            GameCore.player.life = 0;
+                        } else {
+                            GameCore.player.life -= damage;
+                        }
+                        Sound.hurt.play();
+                        GameCore.player.setDamaged(true);
                     }
-                    if ((Game.player.life - damage) <= 0) {
-                        Game.player.life = 0;
-                    } else {
-                        Game.player.life -= damage;
-                    }
-                    Sound.hurt.play();
-                    Game.player.setDamaged(true);
                 }
             }
         }
@@ -144,14 +147,14 @@ public class Enemy extends EnemySprites {
     }
 
     private void selfDestruct() {
-        Game.entities.remove(this);
-        Game.enemies.remove(this);
+        GameCore.entities.remove(this);
+        GameCore.enemies.remove(this);
     }
 
     public boolean isColliding(int xNext, int yNext) {
         Rectangle current = new Rectangle(xNext + maskX, yNext + maskY, maskW, maskH);
 
-        for (Enemy enemy : Game.enemies) {
+        for (Enemy enemy : GameCore.enemies) {
             if (enemy == this) {
                 continue;
             }

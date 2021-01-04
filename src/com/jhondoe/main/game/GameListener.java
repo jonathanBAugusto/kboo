@@ -20,6 +20,11 @@ public class GameListener extends GameCore implements Runnable, KeyListener, Mou
         if (e.getKeyCode() == KeyEvent.VK_SPACE && !Game.player.isJumping()) {
             Game.player.setJump(true);
         }
+        if (e.getKeyCode() == KeyEvent.VK_T) {
+            if (gameState == GameState.PLAY) {
+                saveGame = true;
+            }
+        }
         executeKey(e, true);
     }
 

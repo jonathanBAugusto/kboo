@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,6 +21,7 @@ import com.jhondoe.enums.GameState;
 import com.jhondoe.graphics.Spritesheet;
 import com.jhondoe.graphics.UI;
 import com.jhondoe.main.menu.Menu;
+import com.jhondoe.main.save_state.SaveState;
 import com.jhondoe.tiles.Tile;
 import com.jhondoe.world.World;
 
@@ -29,6 +31,7 @@ public class Game extends GameListener {
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
+	public int xx = 0, yy = (HEIGHT / 2) - 16;
 
 	public Game() {
 		addKeyListener(this);
@@ -41,6 +44,7 @@ public class Game extends GameListener {
 
 	private void initCommons() {
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 		rand = new Random();
 	}
 
@@ -87,6 +91,14 @@ public class Game extends GameListener {
 	}
 
 	private void updateNormal() {
+		xx++;
+		if (saveGame) {
+			saveGame = false;
+			String[] opt1 = { "level", "life", "maxLife", "stamina", "powerAmmo" };
+			int[] opt2 = { currentLevel, player.getLife(), player.getMaxLife(), player.getStamina(),
+					player.getPowerAmmo() };
+			SaveState.saveGame(opt1, opt2, ENCODE_GAME);
+		}
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.update();
@@ -143,6 +155,18 @@ public class Game extends GameListener {
 		}
 	}
 
+	public void drawRectangleEx(int xO, int yO) {
+		for (int xx = 0; xx < 32; xx++) {
+			for (int yy = 0; yy < 32; yy++) {
+				int xOff = xx + xO;
+				int yOff = yy + yO;
+				if (xOff < 0 || xOff >= WIDTH || yOff < 0 || yOff >= HEIGHT)
+					continue;
+				pixels[xOff + (yOff * GameCore.WIDTH)] = 0x00ff00c1;
+			}
+		}
+	}
+
 	public void update() {
 		switch (getGameState()) {
 			case PLAY:
@@ -179,10 +203,12 @@ public class Game extends GameListener {
 			}
 		}
 		/*****/
-		gameUi.render(g);
+		gameUi.uiLifeBar(g);
 		g.dispose();
 		g = bs.getDrawGraphics();
+		drawRectangleEx(xx, yy);
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		gameUi.renderCustom(g);
 		checkStatusGame(g);
 		bs.show();
 	}

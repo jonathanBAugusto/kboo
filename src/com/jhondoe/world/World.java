@@ -25,7 +25,7 @@ public class World {
 
     public World(String path) {
         try {
-            BufferedImage map = ImageIO.read(getClass().getResource(path));
+            BufferedImage map = ImageIO.read(getClass().getResource("/maps" + path));
             WIDTH = map.getWidth();
             HEIGHT = map.getHeight();
             mapArea = WIDTH * HEIGHT;

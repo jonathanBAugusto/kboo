@@ -2,7 +2,6 @@ package com.jhondoe.main.game;
 
 import java.awt.Canvas;
 import java.awt.image.BufferedImage;
-
 import java.util.List;
 import java.util.Random;
 
@@ -21,9 +20,10 @@ import com.jhondoe.world.World;
 public class GameCore extends Canvas {
 
     public static final long serialVersionUID = 1L;
+    public static final int ENCODE_GAME = 21;
     public static JFrame frame;
     protected Thread thread;
-    protected boolean isRunning;
+    protected boolean isRunning, saveGame = false;
     public static final int WIDTH = 240;
     public static final int HEIGHT = 160;
     public static final int SCALE = 4;
@@ -33,6 +33,7 @@ public class GameCore extends Canvas {
     protected boolean showMessageGameOver = false;
 
     protected int currentLevel = 0, maxLevel = 3, framesGameOver = 0, maxFramesGameOver = 30;
+    protected int[] pixels;
     public static int CURRENT_LEVEL = 0;
 
     public static final double FPS = 60.0;

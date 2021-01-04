@@ -16,7 +16,6 @@ import com.jhondoe.world.Camera;
 import com.jhondoe.world.World;
 
 public class Player extends PlayerColiders {
-	public double life = 100, maxLife = 100;
 
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);

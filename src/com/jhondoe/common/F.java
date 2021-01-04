@@ -58,6 +58,24 @@ public class F {
                 return new Point(x + offSetX, y + offSetY);
         }
 
+        public static Point drawCenteredFont(Graphics g, String text, Font font, Color color, int offSetX, int offSetY,
+                        int xPos, int yPos) {
+
+                Rectangle2D rec2 = font.getStringBounds(text, ((Graphics2D) g).getFontRenderContext());
+
+                g.setColor(color);
+                g.setFont(font);
+                int x = xPos == DRAW_CENTERED_FONT_IGNORE_XY
+                                ? (int) ((Main.game.getWidth() / 2) - (rec2.getWidth() / 2))
+                                : xPos;
+                int y = yPos == DRAW_CENTERED_FONT_IGNORE_XY
+                                ? (int) ((Main.game.getHeight() / 2) - (rec2.getHeight() / 2))
+                                : yPos;
+
+                g.drawString(text, x + offSetX, y + offSetY);
+                return new Point(x + offSetX, y + offSetY);
+        }
+
         public static Rectangle2D getRectangle2DFont(String text, Graphics g, int fontSize, int fontStyle) {
                 Font f = new Font("arial", fontStyle, fontSize);
 

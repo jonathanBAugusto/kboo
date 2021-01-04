@@ -12,10 +12,31 @@ import com.jhondoe.main.Main;
 import com.jhondoe.main.game.Game;
 
 public class SaveState {
-    // TODO
-    // https://cursos.dankicode.com/campus/curso-dev-games/finalizando-sistema-de-salvar-jogo
-    // 10:30
-    private static final String pathSaveGame = "/res/saves";
+
+    private static final String pathSaveGame = "./res/saves";
+    private static final String fileNameSaveGame = "/save.kbo";
+
+    public static String getFullPathName() {
+        return pathSaveGame + fileNameSaveGame;
+    }
+
+    private static boolean createDir() {
+        File file = new File(pathSaveGame);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        file = new File(pathSaveGame + fileNameSaveGame);
+        if (file.exists()) {
+            return true;
+        }
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 
     public static void applySave(String str) {
         String[] spl = str.split("/");
@@ -29,17 +50,29 @@ public class SaveState {
                     Main.game.initEntities();
                     Main.game.setGameState(GameState.PLAY);
                     break;
+                case "life":
+                    Game.player.setLife(Double.parseDouble(settings[1]));
+                    break;
+                case "maxLife":
+                    Game.player.setMaxLife(Double.parseDouble(settings[1]));
+                    break;
+                case "stamina":
+                    Game.player.setStamina(Integer.parseInt(settings[1]));
+                    break;
+                case "powerAmmo":
+                    Game.player.setPowerAmmo(Integer.parseInt(settings[1]));
+                    break;
             }
         }
     }
 
     public static String loadGame(int encode) {
         String line = "";
-        File file = new File(pathSaveGame + "/save.kbo");
+        File file = new File(getFullPathName());
         if (file.exists()) {
             try {
                 String singleLine = "";
-                BufferedReader bfReader = new BufferedReader(new FileReader(pathSaveGame + "/save.kbo"));
+                BufferedReader bfReader = new BufferedReader(new FileReader(getFullPathName()));
                 try {
                     while ((singleLine = bfReader.readLine()) != null) {
                         String[] transition = singleLine.split(":");
@@ -62,9 +95,12 @@ public class SaveState {
     }
 
     public static void saveGame(String[] value1, int[] value2, int encode) {
+        if (!createDir()) {
+            return;
+        }
         BufferedWriter write = null;
         try {
-            write = new BufferedWriter(new FileWriter(pathSaveGame + "/save.kbo"));
+            write = new BufferedWriter(new FileWriter(getFullPathName()));
         } catch (IOException e) {
             e.printStackTrace();
         }
