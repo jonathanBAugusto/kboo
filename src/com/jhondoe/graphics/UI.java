@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
-import com.jhondoe.main.game.Game;
-import com.jhondoe.tiles.Tile;
+import com.jhondoe.common.F;
+import com.jhondoe.main.Main;
+import com.jhondoe.main.game.GameCore;
 
 public class UI {
     // private static final int P_HEIGHT = 2, P_WIDTH = 20;
-    private static final int UI_HEIGHT = 10, UI_WIDTH = 60;
+    private static final int UI_HEIGHT = 10;
+    private static final int UI_WIDTH = 60;
 
     // private void playerLifeBar(Graphics g) {
     // g.setColor(Color.red);
@@ -20,37 +22,56 @@ public class UI {
     // g.fillRect((int) ((Game.WIDTH / 2) - (P_WIDTH - (Tile.WIDTH + 2))),
     // (int) ((Game.HEIGHT / 2) - ((Tile.HEIGHT - (P_HEIGHT + (Tile.HEIGHT / 2))) /
     // 2)),
-    // (int) ((Game.player.life / Game.player.maxLife) * P_WIDTH), P_HEIGHT);
+    // (int) ((GameCore.player.life / GameCore.player.maxLife) * P_WIDTH),
+    // P_HEIGHT);
     // }
 
-    private void uiLifeBar(Graphics g) {
+    public void uiLifeBar(Graphics g) {
         g.setColor(Color.red);
         g.fillRect(8, 4, UI_WIDTH, UI_HEIGHT);
         g.setColor(Color.green);
-        g.fillRect(8, 4, (int) ((Game.player.life / Game.player.maxLife) * UI_WIDTH), UI_HEIGHT);
+        g.fillRect(8, 4, (int) ((GameCore.player.life / GameCore.player.maxLife) * UI_WIDTH), UI_HEIGHT);
         g.setColor(Color.white);
         g.setFont(new Font("arial", Font.BOLD, 8));
-        g.drawString((int) Game.player.life + " / " + (int) Game.player.maxLife, 9, 12);
+        g.drawString((int) GameCore.player.life + " / " + (int) GameCore.player.maxLife, 9, 12);
     }
 
-    private void uiAmmo(Graphics g) {
+    public void uiAmmo(Graphics g) {
         g.setColor(Color.white);
-        g.setFont(new Font("arial", Font.BOLD, Tile.HEIGHT / 2));
-        String text = "Ammo: " + Game.player.getPowerAmmo();
-        g.drawString(text, (Game.WIDTH - (text.length() * 5)), 10);
+        String text = "Ammo: " + GameCore.player.getPowerAmmo();
+        Font font = Fonts.getFontFreak(20);
+        g.setFont(font);
+        int widthStr = (int) F.getRectangle2DFont(text, g, font.getSize(), font.getStyle()).getWidth();
+        g.drawString(text, (Main.game.getWidth() - (widthStr + 80)), 20);
     }
 
-    private void uiStamina(Graphics g) {
+    public void uiStamina(Graphics g) {
         g.setColor(Color.white);
-        g.setFont(new Font("arial", Font.BOLD, Tile.HEIGHT / 2));
-        String text = "Stamina: " + Game.player.getStamina();
-        g.drawString(text, (Game.WIDTH - ((text.length() * 4) + 1)), 20);
+        String text = "Stamina: " + GameCore.player.getStamina();
+        Font font = Fonts.getFontFreak(20);
+        g.setFont(font);
+        int widthStr = (int) F.getRectangle2DFont(text, g, font.getSize(), font.getStyle()).getWidth();
+        g.drawString(text, (Main.game.getWidth() - (widthStr + 100)), 40);
     }
 
-    public void render(Graphics g) {
+    public void uiInfo(Graphics g) {
+        String text = "Press -T- to Save the Game";
+        F.drawCenteredFont(g, text, Fonts.getFontRubbb(20), Color.white, 0, 0, F.DRAW_CENTERED_FONT_IGNORE_XY,
+                Main.game.getHeight() - 20);
+
+    }
+
+    public void renderCustom(Graphics g) {
+        uiAmmo(g);
+        uiStamina(g);
+        uiInfo(g);
+    }
+
+    public void renderAll(Graphics g) {
         // playerLifeBar(g);
         uiLifeBar(g);
         uiAmmo(g);
         uiStamina(g);
+        uiInfo(g);
     }
 }

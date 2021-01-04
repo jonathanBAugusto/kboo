@@ -46,6 +46,8 @@ public class PlayerCore extends Entity {
     protected static BufferedImage upPlayerDamaged;
     protected static BufferedImage downPlayerDamaged;
 
+    public double life = 100, maxLife = 100;
+
     public PlayerCore(double x, double y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
     }
@@ -176,6 +178,22 @@ public class PlayerCore extends Entity {
 
     public void setMouseY(int mouseY) {
         this.mouseY = mouseY;
+    }
+
+    public int getLife() {
+        return (int) life;
+    }
+
+    public void setLife(double life) {
+        this.life = life;
+    }
+
+    public int getMaxLife() {
+        return (int) maxLife;
+    }
+
+    public void setMaxLife(double maxLife) {
+        this.maxLife = maxLife;
     }
 
     protected double getMouseAngleByClick() {
