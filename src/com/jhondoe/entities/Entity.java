@@ -135,6 +135,14 @@ public class Entity {
 		return maskX;
 	}
 
+	public int getMaskedX() {
+		return (int) x + maskX;
+	}
+
+	public int getMaskedY() {
+		return (int) y + maskX;
+	}
+
 	public void setMaskX(int maskX) {
 		this.maskX = maskX;
 	}

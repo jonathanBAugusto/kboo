@@ -1,78 +1,89 @@
 package com.jhondoe.main.sound;
 
-import java.io.IOException;
+import java.io.*;
+import java.security.DigestInputStream;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 
 public class Sound {
-    private String filePath = "/sound";
-    private Thread t;
+    public static class Clips {
+        public Clip[] clips;
+        private int p;
+        private int count;
 
-    private Clip clip;
-    private AudioInputStream inputStream;
+        public Clips(byte[] buffer, int count)
+                throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+            if (buffer == null) {
+                return;
+            }
 
-    public static final Sound background = new Sound("/star-way-low.wav");
-    public static final Sound fireBullet = new Sound("/fire-bullet.wav");
-    public static final Sound hitBullet = new Sound("/hit-bullet.wav");
-    public static final Sound menuItem = new Sound("/menu-item.wav");
-    public static final Sound menuEnter = new Sound("/menu-enter.wav");
-    public static final Sound pause = new Sound("/pause.wav");
-    public static final Sound hurt = new Sound("/hurt.wav");
-    public static final Sound powerUp = new Sound("/power-up.wav");
+            clips = new Clip[count];
+            this.count = count;
 
-    private AudioInputStream getAudioInputStream() {
-        try {
-            return AudioSystem.getAudioInputStream(Sound.class.getResourceAsStream(filePath));
-        } catch (UnsupportedAudioFileException | IOException e) {
-            e.printStackTrace();
+            for (int i = 0; i < count; i++) {
+                clips[i] = AudioSystem.getClip();
+                clips[i].open(AudioSystem.getAudioInputStream(new ByteArrayInputStream(buffer)));
+            }
         }
-        return null;
+
+        public void play() {
+            if (clips == null || clips.length == 0)
+                return;
+
+            clips[p].stop();
+            clips[p].setFramePosition(0);
+            clips[p].start();
+            p++;
+
+            if (p >= count)
+                p = 0;
+        }
+
+        public void loop() {
+            if (clips == null || clips.length == 0)
+                return;
+
+            clips[p].loop(Clip.LOOP_CONTINUOUSLY);
+        }
+
+        public void stop() {
+            if (clips == null || clips.length == 0)
+                return;
+
+            clips[p].stop();
+        }
     }
 
-    public Sound(String file) {
-        // if (true) {
-        // return;
-        // }
-        this.filePath += file;
+    private static Clips load(String name, int count) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataInputStream dis = new DataInputStream(Sound.class.getResourceAsStream(name));
+
+        byte[] buffer = new byte[1024];
+        int read = 0;
         try {
-            clip = AudioSystem.getClip(null);
-            inputStream = getAudioInputStream();
-            clip.open(inputStream);
+            while ((read = dis.read(buffer)) > 0) {
+                baos.write(buffer, 0, read);
+            }
+            dis.close();
+            byte[] data = baos.toByteArray();
+            return new Clips(data, count);
+
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void play() {
-        t = new Thread() {
-            public void run() {
-                clip.setFramePosition(0);
-                clip.start();
+            try {
+                return new Clips(null, 0);
+            } catch (Exception e1) {
+                return null;
             }
-        };
-        t.start();
-        while (t.isAlive()) {
-            Thread.yield();
-        }
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
-    public void loop() {
-        new Thread() {
-            public void run() {
-                // clip.loop(Clip.LOOP_CONTINUOUSLY);
-            }
-        }.start();
-    }
-
-    public void stop() {
-        clip.stop();
-    }
+    public static Clips flow = load("/sound/flow.wav", 1);
+    public static Clips background = load("/sound/star-way-low.wav", 1);
+    public static Clips fireBullet = load("/sound/fire-bullet.wav", 1);
+    public static Clips hitBullet = load("/sound/hit-bullet.wav", 1);
+    public static Clips menuItem = load("/sound/menu-item.wav", 1);
+    public static Clips menuEnter = load("/sound/menu-enter.wav", 1);
+    public static Clips pause = load("/sound/pause.wav", 1);
+    public static Clips hurt = load("/sound/hurt.wav", 1);
+    public static Clips powerUp = load("/sound/power-up.wav", 1);
 }

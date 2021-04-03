@@ -24,9 +24,9 @@ public class GameCore extends Canvas {
     public static JFrame frame;
     protected Thread thread;
     protected boolean isRunning, saveGame = false;
-    public static final int WIDTH = 240;
-    public static final int HEIGHT = 160;
-    public static final int SCALE = 5;
+    public static final int WIDTH = 640;
+    public static final int HEIGHT = 480;
+    public static final int SCALE = 2;
 
     protected BufferedImage image;
     protected GameState gameState = GameState.MENU;

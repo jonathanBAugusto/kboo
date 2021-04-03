@@ -93,83 +93,83 @@ public class PlayerSprites extends PlayerCore {
         boolean stopped = false;
 
         switch (dir) {
-            case LEFT:
-                if (isDamaged()) {
-                    drawSprite(g, leftPlayerDamaged);
-                } else if (animateShift()) {
-                    drawSprite(g, leftPlayerRunner[runnerIndex]);
-                } else if (moved) {
-                    drawSprite(g, leftPlayer[index]);
+        case LEFT:
+            if (isDamaged()) {
+                drawSprite(g, leftPlayerDamaged);
+            } else if (animateShift()) {
+                drawSprite(g, leftPlayerRunner[runnerIndex]);
+            } else if (moved) {
+                drawSprite(g, leftPlayer[index]);
+            } else {
+                drawSprite(g, leftStoppedPlayer[stoppedIndex]);
+                stopped = true;
+            }
+            if (this.powerAmmo > 0) {
+                if (stopped) {
+                    drawSprite(g, stoppedIndex <= 0 ? Entity.hat1 : Entity.hat2);
                 } else {
-                    drawSprite(g, leftStoppedPlayer[stoppedIndex]);
-                    stopped = true;
+                    drawSprite(g, Entity.hat1);
                 }
-                if (this.powerAmmo > 0) {
-                    if (stopped) {
-                        drawSprite(g, stoppedIndex <= 0 ? Entity.hat1 : Entity.hat2);
-                    } else {
-                        drawSprite(g, Entity.hat1);
-                    }
-                }
-                break;
-            case UP:
-                if (isDamaged()) {
-                    drawSprite(g, upPlayerDamaged);
-                } else if (animateShift()) {
-                    drawSprite(g, upPlayerRunner[runnerIndex]);
-                } else if (moved) {
-                    drawSprite(g, upPlayer[index]);
+            }
+            break;
+        case UP:
+            if (isDamaged()) {
+                drawSprite(g, upPlayerDamaged);
+            } else if (animateShift()) {
+                drawSprite(g, upPlayerRunner[runnerIndex]);
+            } else if (moved) {
+                drawSprite(g, upPlayer[index]);
+            } else {
+                drawSprite(g, upStoppedPlayer[stoppedIndex]);
+                stopped = true;
+            }
+            if (this.powerAmmo > 0) {
+                if (stopped) {
+                    drawSprite(g, stoppedIndex <= 0 ? Entity.hat1 : Entity.hat2);
                 } else {
-                    drawSprite(g, upStoppedPlayer[stoppedIndex]);
-                    stopped = true;
+                    drawSprite(g, Entity.hat1);
                 }
-                if (this.powerAmmo > 0) {
-                    if (stopped) {
-                        drawSprite(g, stoppedIndex <= 0 ? Entity.hat1 : Entity.hat2);
-                    } else {
-                        drawSprite(g, Entity.hat1);
-                    }
-                }
-                break;
-            case DOWN:
-                if (isDamaged()) {
-                    drawSprite(g, downPlayerDamaged);
-                } else if (animateShift()) {
-                    drawSprite(g, downPlayerRunner[runnerIndex]);
-                } else if (moved) {
-                    drawSprite(g, downPlayer[index]);
+            }
+            break;
+        case DOWN:
+            if (isDamaged()) {
+                drawSprite(g, downPlayerDamaged);
+            } else if (animateShift()) {
+                drawSprite(g, downPlayerRunner[runnerIndex]);
+            } else if (moved) {
+                drawSprite(g, downPlayer[index]);
+            } else {
+                drawSprite(g, downStoppedPlayer[stoppedIndex]);
+                stopped = true;
+            }
+            if (this.powerAmmo > 0) {
+                if (stopped) {
+                    drawSprite(g, stoppedIndex <= 0 ? Entity.hat1 : Entity.hat2);
                 } else {
-                    drawSprite(g, downStoppedPlayer[stoppedIndex]);
-                    stopped = true;
+                    drawSprite(g, Entity.hat1);
                 }
-                if (this.powerAmmo > 0) {
-                    if (stopped) {
-                        drawSprite(g, stoppedIndex <= 0 ? Entity.hat1 : Entity.hat2);
-                    } else {
-                        drawSprite(g, Entity.hat1);
-                    }
-                }
-                break;
-            case RIGHT:
-            default:
-                if (isDamaged()) {
-                    drawSprite(g, rightPlayerDamaged);
-                } else if (animateShift()) {
-                    drawSprite(g, rightPlayerRunner[runnerIndex]);
-                } else if (moved) {
-                    drawSprite(g, rightPlayer[index]);
+            }
+            break;
+        case RIGHT:
+        default:
+            if (isDamaged()) {
+                drawSprite(g, rightPlayerDamaged);
+            } else if (animateShift()) {
+                drawSprite(g, rightPlayerRunner[runnerIndex]);
+            } else if (moved) {
+                drawSprite(g, rightPlayer[index]);
+            } else {
+                drawSprite(g, rightStoppedPlayer[stoppedIndex]);
+                stopped = true;
+            }
+            if (this.powerAmmo > 0) {
+                if (stopped) {
+                    drawSprite(g, stoppedIndex <= 0 ? Entity.hat1 : Entity.hat2);
                 } else {
-                    drawSprite(g, rightStoppedPlayer[stoppedIndex]);
-                    stopped = true;
+                    drawSprite(g, Entity.hat1);
                 }
-                if (this.powerAmmo > 0) {
-                    if (stopped) {
-                        drawSprite(g, stoppedIndex <= 0 ? Entity.hat1 : Entity.hat2);
-                    } else {
-                        drawSprite(g, Entity.hat1);
-                    }
-                }
-                break;
+            }
+            break;
         }
         if (isJumping) {
             Graphics2D g2d = (Graphics2D) g;
@@ -177,7 +177,6 @@ public class PlayerSprites extends PlayerCore {
             g2d.fillOval((int) (getXCamera() + ((Game.player.getWidth() / 2) * 0.5)),
                     (int) getYCamera() + (Game.player.getHeight() / 2), 10, 7);
         }
-        System.out.println("Z: " + getZ());
     }
 
 }

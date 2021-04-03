@@ -43,6 +43,7 @@ public class Game extends GameListener {
 	public Game() {
 		addKeyListener(this);
 		addMouseListener(this);
+		// setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
 		setPreferredSize(new Dimension(getWidth(), getHeight()));
 		initFrame();
 		initCommons();
@@ -98,6 +99,7 @@ public class Game extends GameListener {
 		frame = new JFrame("KBoo");
 		frame.add(this);
 		frame.setResizable(false);
+		frame.setUndecorated(true);
 		frame.pack();
 		customPointer(frame);
 		customIcon(frame);
@@ -240,7 +242,7 @@ public class Game extends GameListener {
 		gameUi.uiLifeBar(g);
 		g.dispose();
 		g = bs.getDrawGraphics();
-		drawRectangleEx(xx, yy);
+		// drawRectangleEx(xx, yy); - animação
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		gameUi.renderCustom(g);
 		World.renderMinimap();
@@ -250,6 +252,7 @@ public class Game extends GameListener {
 	}
 
 	public void run() {
+		requestFocus();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = FPS;
 		double ns = 1000000000 / amountOfTicks;

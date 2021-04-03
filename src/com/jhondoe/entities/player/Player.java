@@ -65,22 +65,22 @@ public class Player extends PlayerColiders {
 			}
 		}
 
-		if (left && World.isFree((int) (x - customSpeed), (int) y, (isJumping))) {
+		if (left && World.isFree((int) (getMaskedX() - customSpeed), (int) getMaskedY(), (isJumping))) {
 			moved = true;
 			last_dir = Dir.LEFT;
 			x -= customSpeed;
 		}
-		if (right && World.isFree((int) (x + customSpeed), (int) y, (isJumping))) {
+		if (right && World.isFree((int) (getMaskedX() + customSpeed), (int) getMaskedY(), (isJumping))) {
 			moved = true;
 			last_dir = Dir.RIGHT;
 			x += customSpeed;
 		}
-		if (up && World.isFree((int) x, (int) (y - customSpeed), (isJumping))) {
+		if (up && World.isFree((int) getMaskedX(), (int) (getMaskedY() - customSpeed), (isJumping))) {
 			moved = true;
 			last_dir = Dir.UP;
 			y -= customSpeed;
 		}
-		if (down && World.isFree((int) x, (int) (y + customSpeed), (isJumping))) {
+		if (down && World.isFree((int) getMaskedX(), (int) (getMaskedY() + customSpeed), (isJumping))) {
 			moved = true;
 			last_dir = Dir.DOWN;
 			y += customSpeed;
