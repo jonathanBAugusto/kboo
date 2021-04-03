@@ -1,9 +1,16 @@
 package com.jhondoe.entities;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
+import java.util.List;
 
+import com.jhondoe.entities.enemy.Enemy;
 import com.jhondoe.main.game.Game;
+import com.jhondoe.main.game.GameCore;
+import com.jhondoe.main.logic.Node;
+import com.jhondoe.main.logic.Vector2i;
 import com.jhondoe.tiles.Tile;
 import com.jhondoe.world.Camera;
 
@@ -17,10 +24,28 @@ public class Entity {
 
 	protected int maskX, maskY, maskW, maskH;
 
+	protected List<Node> path;
+
 	public static BufferedImage hat1 = Game.spritesheet.getSprite(0, (6 * Tile.HEIGHT), Tile.WIDTH, Tile.HEIGHT);
 	public static BufferedImage hat2 = Game.spritesheet.getSprite(16, (6 * Tile.HEIGHT), Tile.WIDTH, Tile.HEIGHT);
 	public static BufferedImage ENEMY_FEEDBACK = Game.enemySheet.getSprite(0, (6 * Tile.HEIGHT), Tile.WIDTH,
 			Tile.HEIGHT);
+	private int depth;
+
+	public Entity() {
+
+	}
+
+	public static Comparator<Entity> depthSorter = new Comparator<Entity>() {
+		@Override
+		public int compare(Entity n0, Entity n1) {
+			if (n1.getDepth() < n0.getDepth())
+				return 1;
+			if (n1.getDepth() > n0.getDepth())
+				return -1;
+			return 0;
+		}
+	};
 
 	public Entity(double x, double y, int width, int height, BufferedImage sprite) {
 		this.x = x;
@@ -40,6 +65,14 @@ public class Entity {
 		this.maskY = maskY;
 		this.maskW = maskW;
 		this.maskH = maskH;
+	}
+
+	public int getDepth() {
+		return depth;
+	}
+
+	public void setDepth(int newDepth) {
+		depth = newDepth;
 	}
 
 	protected double getXCamera() {
@@ -132,6 +165,51 @@ public class Entity {
 
 	public void update() {
 
+	}
+
+	public boolean isCollidingEnemy(int xNext, int yNext) {
+		Rectangle current = new Rectangle(xNext + maskX, yNext + maskY, maskW, maskH);
+
+		for (Enemy enemy : GameCore.enemies) {
+			if (enemy == this) {
+				continue;
+			}
+
+			if (current
+					.intersects(new Rectangle((int) enemy.getX() + maskX, (int) enemy.getY() + maskY, maskW, maskH))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void followPath(List<Node> path, double speed) {
+		if (path != null) {
+			if (path.size() > 0) {
+				Vector2i target = path.get(path.size() - 1).tile;
+				// if (this.x < target.x * Tile.WIDTH && !isCollidingEnemy((int) (x + speed),
+				// (int) y)) {
+				if (this.x < target.x * Tile.WIDTH) {
+					this.x += speed;
+				} else if (this.x > target.x * Tile.WIDTH) {
+					this.x -= speed;
+				}
+
+				// if (this.y < target.y * Tile.HEIGHT && !isCollidingEnemy((int) x, (int) (y +
+				// speed))) {
+				if (this.y < target.y * Tile.HEIGHT) {
+					this.y += speed;
+				} else if (this.y > target.y * Tile.HEIGHT) {
+					this.y -= speed;
+				}
+				int tileX = target.x * Tile.WIDTH;
+				int tileY = target.y * Tile.HEIGHT;
+				if ((int) this.x == tileX && (int) this.y == tileY) {
+					path.remove(path.size() - 1);
+				}
+			}
+		}
 	}
 
 	public void render(Graphics g) {

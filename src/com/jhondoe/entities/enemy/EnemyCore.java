@@ -11,7 +11,7 @@ import com.jhondoe.main.game.Game;
 public class EnemyCore extends Entity {
     protected static double speed = 1;
 
-    protected static final int maskX = 3, maskY = 6, maskW = 10, maskH = 10;
+    public static final int maskX = 3, maskY = 6, maskW = 10, maskH = 10;
 
     protected int frames = 0, maxFrames = 20, hitFrame = 0, damageFrame = 0, damageMaxFrame = 5, maxHitDamage = 50;
 

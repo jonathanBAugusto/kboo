@@ -51,6 +51,8 @@ public class Player extends PlayerColiders {
 	}
 
 	public void update() {
+		setDepth(3);
+
 		checkJump();
 
 		double customSpeed = speed;
@@ -130,7 +132,10 @@ public class Player extends PlayerColiders {
 		if (this.life <= 0) {
 			Main.game.setGameState(GameState.GAME_OVER);
 		}
+		updateCamera();
+	}
 
+	public void updateCamera() {
 		Camera.setX(Camera.clamp((int) getX() - (Game.WIDTH / 2), 0, (World.WIDTH * Tile.WIDTH) - Game.WIDTH));
 		Camera.setY(Camera.clamp((int) getY() - (Game.HEIGHT / 2), 0, (World.HEIGHT * Tile.HEIGHT) - Game.HEIGHT));
 	}

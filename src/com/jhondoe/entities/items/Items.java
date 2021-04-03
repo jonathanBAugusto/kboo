@@ -15,6 +15,7 @@ public class Items extends Entity {
 
     public Items(double x, double y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
+        setDepth(2);
     }
 
     protected void initSprites() {

@@ -7,6 +7,9 @@ import java.awt.Graphics;
 import com.jhondoe.common.F;
 import com.jhondoe.main.Main;
 import com.jhondoe.main.game.GameCore;
+import com.jhondoe.world.World;
+
+import java.awt.image.BufferedImage;
 
 public class UI {
     // private static final int P_HEIGHT = 2, P_WIDTH = 20;
@@ -59,6 +62,10 @@ public class UI {
         F.drawCenteredFont(g, text, Fonts.getFontRubbb(20), Color.white, 0, 0, F.DRAW_CENTERED_FONT_IGNORE_XY,
                 Main.game.getHeight() - 20);
 
+    }
+
+    public void miniMapDraw(Graphics g, BufferedImage minimapImage) {
+        g.drawImage(minimapImage, 600, 60, World.HEIGHT * 5, World.WIDTH * 5, null);
     }
 
     public void renderCustom(Graphics g) {

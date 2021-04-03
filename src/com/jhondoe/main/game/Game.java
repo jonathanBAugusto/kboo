@@ -8,6 +8,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -63,6 +64,8 @@ public class Game extends GameListener {
 		gameUi = new UI();
 		entities.add(player);
 		world = new World("/map" + (currentLevel + 1) + ".png");
+		minimapImage = new BufferedImage(World.WIDTH, World.HEIGHT, BufferedImage.TYPE_INT_RGB);
+		minimapPixels = ((DataBufferInt) minimapImage.getRaster().getDataBuffer()).getData();
 	}
 
 	public void initFrame() {
@@ -99,6 +102,9 @@ public class Game extends GameListener {
 					player.getPowerAmmo() };
 			SaveState.saveGame(opt1, opt2, ENCODE_GAME);
 		}
+
+		Collections.sort(entities, Entity.depthSorter);
+
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.update();
@@ -134,23 +140,24 @@ public class Game extends GameListener {
 
 	private void checkStatusGame(Graphics g) {
 		switch (getGameState()) {
-			case GAME_OVER:
-				Graphics2D g2d = (Graphics2D) g;
-				g2d.setColor(new Color(0, 0, 0, 100));
-				g2d.fillRect(0, 0, getWidth() * SCALE, getHeight() * SCALE);
+		case GAME_OVER:
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setColor(new Color(0, 0, 0, 100));
+			g2d.fillRect(0, 0, getWidth() * SCALE, getHeight() * SCALE);
 
-				F.drawCenteredFontBold(g, "GAME OVER", 80, Color.white, 0, -40);
-				if (isShowMessageGameOver()) {
-					F.drawCenteredFontBold(g, ">>>Press Enter to try again...<<<", 30, Color.white, 0, 60);
-				}
-				break;
-			case MENU:
-				menu.render(g);
-				break;
-			case PLAY:
-				break;
-			default:
-				break;
+			F.drawCenteredFontBold(g, "GAME OVER", 80, Color.white, 0, -40);
+			if (isShowMessageGameOver()) {
+				F.drawCenteredFontBold(g, ">>>Press Enter to try again...<<<", 30, Color.white, 0, 60);
+			}
+			break;
+		case MENU:
+			player.updateCamera();
+			menu.render(g);
+			break;
+		case PLAY:
+			break;
+		default:
+			break;
 
 		}
 	}
@@ -169,13 +176,13 @@ public class Game extends GameListener {
 
 	public void update() {
 		switch (getGameState()) {
-			case PLAY:
-				updateNormal();
-			case GAME_OVER:
-				updateGameOver();
-			case MENU:
-				menu.update();
-				break;
+		case PLAY:
+			updateNormal();
+		case GAME_OVER:
+			updateGameOver();
+		case MENU:
+			menu.update();
+			break;
 		}
 	}
 
@@ -203,12 +210,14 @@ public class Game extends GameListener {
 			}
 		}
 		/*****/
-		gameUi.uiLifeBar(g);
+		// gameUi.uiLifeBar(g);
 		g.dispose();
 		g = bs.getDrawGraphics();
 		drawRectangleEx(xx, yy);
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-		gameUi.renderCustom(g);
+		gameUi.renderAll(g);
+		World.renderMinimap();
+		gameUi.miniMapDraw(g, minimapImage);
 		checkStatusGame(g);
 		bs.show();
 	}

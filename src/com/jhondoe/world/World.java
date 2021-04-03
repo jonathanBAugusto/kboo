@@ -71,6 +71,10 @@ public class World {
         }
     }
 
+    private static boolean isFreeDiagonal(int xNext, int yNext) {
+        return false;
+    }
+
     public static boolean isFree(int xNext, int yNext) {
         return isFree(xNext, yNext, false);
     }
@@ -94,6 +98,7 @@ public class World {
 
         int x4 = (xNext + (tileW - 1)) / tileW;
         int y4 = (yNext + (tileH - 1)) / tileH;
+
         return !((tiles[x1 + (y1 * World.WIDTH)] instanceof WallTile)
                 || (tiles[x2 + (y2 * World.WIDTH)] instanceof WallTile)
                 || (tiles[x3 + (y3 * World.WIDTH)] instanceof WallTile)
@@ -112,6 +117,22 @@ public class World {
                 if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
                     continue;
                 tiles[x + (y * WIDTH)].render(g);
+            }
+        }
+    }
+
+    public static void renderMinimap() {
+        // for (int i = 0; i < Game.minimapPixels.length; i++) {
+        // Game.minimapPixels[i] = 0xFFCC20CC;
+        // }
+
+        for (int xx = 0; xx < WIDTH; xx++) {
+            for (int yy = 0; yy < HEIGHT; yy++) {
+                if (tiles[xx + (yy * WIDTH)] instanceof WallTile) {
+                    Game.minimapPixels[xx + (yy * WIDTH)] = 0xFF30DDCC;
+                } else {
+                    Game.minimapPixels[xx + (yy * WIDTH)] = 0;
+                }
             }
         }
     }

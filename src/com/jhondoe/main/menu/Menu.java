@@ -47,33 +47,33 @@ public class Menu {
 
     private void enterMenu() {
         switch (currentOption) {
-            case 0:// New Game
-                if (!pause) {
-                    File file = new File(SaveState.getFullPathName());
-                    if (file.exists())
-                        file.delete();
-                    Main.game.setCurrentLevel(0);
+        case 0:// New Game
+            if (!pause) {
+                File file = new File(SaveState.getFullPathName());
+                if (file.exists())
+                    file.delete();
+                Main.game.setCurrentLevel(0);
+            }
+            Main.game.setGameState(GameState.PLAY);
+            Sound.background.loop();
+            pause = false;
+            break;
+        case 1:// LoadGame
+            File file = new File(SaveState.getFullPathName());
+            if (file.exists()) {
+                String saver = SaveState.loadGame(Game.ENCODE_GAME);
+                SaveState.applySave(saver);
+                if (pause) {
+                    Main.game.initEntities();
                 }
                 Main.game.setGameState(GameState.PLAY);
                 Sound.background.loop();
                 pause = false;
-                break;
-            case 1:// LoadGame
-                File file = new File(SaveState.getFullPathName());
-                if (file.exists()) {
-                    String saver = SaveState.loadGame(Game.ENCODE_GAME);
-                    SaveState.applySave(saver);
-                    // if (pause) {
-                    // Main.game.initEntities();
-                    // }
-                    Main.game.setGameState(GameState.PLAY);
-                    Sound.background.loop();
-                    pause = false;
-                }
-                break;
-            case 2:
-                System.exit(1);
-                break;
+            }
+            break;
+        case 2:
+            System.exit(1);
+            break;
         }
         enter = false;
     }

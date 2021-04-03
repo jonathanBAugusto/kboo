@@ -23,6 +23,7 @@ public class Bullet extends Entity {
 
     public Bullet(double x, double y, int width, int height, BufferedImage sprite, double dx, double dy) {
         super(x, y, width, height, sprite);
+        setDepth(4);
         this.dx = dx;
         this.dy = dy;
     }

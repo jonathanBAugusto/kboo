@@ -26,7 +26,7 @@ public class GameCore extends Canvas {
     protected boolean isRunning, saveGame = false;
     public static final int WIDTH = 240;
     public static final int HEIGHT = 160;
-    public static final int SCALE = 4;
+    public static final int SCALE = 3;
 
     protected BufferedImage image;
     protected GameState gameState = GameState.MENU;
@@ -34,6 +34,9 @@ public class GameCore extends Canvas {
 
     protected int currentLevel = 0, maxLevel = 3, framesGameOver = 0, maxFramesGameOver = 30;
     protected int[] pixels;
+
+    protected static BufferedImage minimapImage;
+
     public static int CURRENT_LEVEL = 0;
 
     public static final double FPS = 60.0;
@@ -54,6 +57,8 @@ public class GameCore extends Canvas {
     public static World world;
 
     public static Random rand;
+
+    public static int[] minimapPixels;
 
     public int getWidth() {
         return WIDTH * SCALE;

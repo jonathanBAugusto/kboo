@@ -67,7 +67,7 @@ public class Sound {
     public void loop() {
         new Thread() {
             public void run() {
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
+                // clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
         }.start();
     }
