@@ -63,8 +63,9 @@ public class Game extends GameListener {
 		player = new Player(0, 0, Tile.WIDTH, Tile.HEIGHT, playerSheet.getSprite(0, 48, Tile.WIDTH, Tile.HEIGHT));
 		gameUi = new UI();
 		entities.add(player);
-		world = new World("/map" + (currentLevel + 1) + ".png");
-		minimapImage = new BufferedImage(World.WIDTH, World.HEIGHT, BufferedImage.TYPE_INT_RGB);
+		// world = new World("/map" + (currentLevel + 1) + ".png");
+		world = new World();
+		minimapImage = new BufferedImage(World.WIDTH, World.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		minimapPixels = ((DataBufferInt) minimapImage.getRaster().getDataBuffer()).getData();
 	}
 
@@ -115,12 +116,11 @@ public class Game extends GameListener {
 		}
 
 		if (enemies.size() == 0) {
-			sumCurrentLevel(1);
-			if (getCurrentLevel() >= maxLevel) {
-				setCurrentLevel(0);
-			}
-			initEntities();
-			return;
+			// sumCurrentLevel(1);
+			// if (getCurrentLevel() >= maxLevel) {
+			// setCurrentLevel(0);
+			// }
+			// initEntities();
 		}
 	}
 
@@ -210,12 +210,12 @@ public class Game extends GameListener {
 			}
 		}
 		/*****/
-		// gameUi.uiLifeBar(g);
+		gameUi.uiLifeBar(g);
 		g.dispose();
 		g = bs.getDrawGraphics();
 		drawRectangleEx(xx, yy);
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-		gameUi.renderAll(g);
+		gameUi.renderCustom(g);
 		World.renderMinimap();
 		gameUi.miniMapDraw(g, minimapImage);
 		checkStatusGame(g);

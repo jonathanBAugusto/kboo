@@ -253,4 +253,9 @@ public class PlayerCore extends Entity {
     public void setJumping(boolean isJumping) {
         this.isJumping = isJumping;
     }
+
+    public void setPosition(Point p) {
+        x = p.x;
+        y = p.y;
+    }
 }

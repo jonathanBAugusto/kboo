@@ -6,6 +6,7 @@ import java.awt.Graphics;
 
 import com.jhondoe.common.F;
 import com.jhondoe.main.Main;
+import com.jhondoe.main.game.Game;
 import com.jhondoe.main.game.GameCore;
 import com.jhondoe.world.World;
 
@@ -65,7 +66,8 @@ public class UI {
     }
 
     public void miniMapDraw(Graphics g, BufferedImage minimapImage) {
-        g.drawImage(minimapImage, 600, 60, World.HEIGHT * 5, World.WIDTH * 5, null);
+        g.drawImage(minimapImage, (Game.WIDTH * Game.SCALE) - ((int) ((World.WIDTH * Game.SCALE) * 1.5)), 60,
+                World.HEIGHT * 5, World.WIDTH * 5, null);
     }
 
     public void renderCustom(Graphics g) {

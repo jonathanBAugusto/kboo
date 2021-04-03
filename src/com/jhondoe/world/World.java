@@ -2,6 +2,7 @@ package com.jhondoe.world;
 
 import javax.imageio.ImageIO;
 
+import com.jhondoe.entities.Entity;
 import com.jhondoe.entities.enemy.Enemy;
 import com.jhondoe.entities.items.life_pack.LifePack;
 import com.jhondoe.entities.items.power_ammo.PowerAmmo;
@@ -15,6 +16,7 @@ import com.jhondoe.tiles.WallTile;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.Point;
 import java.io.IOException;
 
 public class World {
@@ -23,19 +25,119 @@ public class World {
     private int mapArea;
     public static int WIDTH, HEIGHT;
 
+    public World() {
+        Game.player.setPosition(new Point(16, 16));
+        WIDTH = 25;
+        HEIGHT = 25;
+        tiles = new Tile[WIDTH * HEIGHT];
+
+        int dir = 0, xx = 0, yy = 0;
+        for (int x1 = 0; x1 < WIDTH; x1++) {
+            for (int y1 = 0; y1 < HEIGHT; y1++) {
+                int rand = Game.rand.nextInt(100);
+                if (rand >= 30) {
+                    tiles[x1 + (y1 * WIDTH)] = new WallTile(x1 * Tile.WIDTH, y1 * Tile.HEIGHT, Tile.TILE_WALL_CRACKED);
+                } else {
+                    tiles[x1 + (y1 * WIDTH)] = new WallTile(x1 * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_WALL);
+                }
+
+            }
+        }
+
+        for (int i = 0; i < (WIDTH * HEIGHT); i++) {
+            if (yy == 1 && xx == 1) {
+                if (Game.rand.nextInt(200) > 50) {
+                    tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS_ROCK);
+                } else {
+                    tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS);
+                }
+            }
+
+            if (dir == 0 && xx < WIDTH) {
+                xx++;
+            } else if (dir == 1 && xx > 0) {
+                xx--;
+            } else if (dir == 2 && yy < HEIGHT) {
+                yy++;
+            } else if (dir == 3 && yy > 0) {
+                yy--;
+            }
+
+            if (Game.rand.nextInt(100) < 20) {
+                dir = Game.rand.nextInt(4);
+            }
+
+            if (yy == 0 || xx == 0 || yy == HEIGHT - 1 || xx == WIDTH - 1) {
+                continue;
+            }
+            // if ((xx + (yy * WIDTH)) > 0 && (xx + (yy * WIDTH)) < WIDTH * HEIGHT) {
+            // if (Game.rand.nextInt(200) > 50) {
+            // tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT,
+            // Tile.TILE_GRASS_ROCK);
+            // } else {
+            // tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT,
+            // Tile.TILE_GRASS);
+            // }
+            // }
+            int pos1 = 0, pos2 = 0, pos3 = 0;
+            int xx1 = xx, xx3 = xx, yy1 = yy, yy3 = yy;
+            if (dir == 0 || dir == 1) {
+                yy1 = yy - 1;
+                yy3 = yy + 1;
+                pos1 = xx + (yy - 1 * WIDTH);
+                pos2 = xx + (yy * WIDTH);
+                pos3 = xx + (yy + 1 * WIDTH);
+            } else if (dir == 2 || dir == 3) {
+                xx1 = xx - 1;
+                xx3 = xx + 1;
+                pos1 = (xx - 1) + (yy * WIDTH);
+                pos2 = xx + (yy * WIDTH);
+                pos3 = (xx + 1) + (yy * WIDTH);
+            }
+
+            // if (pos1 > 0 && pos1 < WIDTH * HEIGHT) {
+            // if (Game.rand.nextInt(200) > 50) {
+            // tiles[pos1] = new GrassTile(xx1 * Tile.WIDTH, yy1 * Tile.HEIGHT,
+            // Tile.TILE_GRASS_ROCK);
+            // } else {
+            // tiles[pos1] = new GrassTile(xx1 * Tile.WIDTH, yy1 * Tile.HEIGHT,
+            // Tile.TILE_GRASS);
+            // }
+            // }
+
+            if (pos2 > 0 && pos2 < WIDTH * HEIGHT) {
+                if (Game.rand.nextInt(200) > 50) {
+                    tiles[pos2] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS_ROCK);
+                } else {
+                    tiles[pos2] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS);
+                }
+            }
+
+            // if (pos3 > 0 && pos3 < WIDTH * HEIGHT) {
+            // if (Game.rand.nextInt(200) > 50) {
+            // tiles[pos3] = new GrassTile(xx3 * Tile.WIDTH, yy3 * Tile.HEIGHT,
+            // Tile.TILE_GRASS_ROCK);
+            // } else {
+            // tiles[pos3] = new GrassTile(xx3 * Tile.WIDTH, yy3 * Tile.HEIGHT,
+            // Tile.TILE_GRASS);
+            // }
+            // }
+        }
+    }
+
     public World(String path) {
         try {
             BufferedImage map = ImageIO.read(getClass().getResource("/maps" + path));
             WIDTH = map.getWidth();
             HEIGHT = map.getHeight();
             mapArea = WIDTH * HEIGHT;
-            createMap(map);
+            drawMap(map);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void createMap(BufferedImage map) {
+    private void drawMap(BufferedImage map) {
         int[] pixels = new int[mapArea];
         tiles = new Tile[mapArea];
         map.getRGB(0, 0, WIDTH, HEIGHT, pixels, 0, WIDTH);
@@ -122,19 +224,46 @@ public class World {
     }
 
     public static void renderMinimap() {
-        // for (int i = 0; i < Game.minimapPixels.length; i++) {
-        // Game.minimapPixels[i] = 0xFFCC20CC;
-        // }
-
         for (int xx = 0; xx < WIDTH; xx++) {
             for (int yy = 0; yy < HEIGHT; yy++) {
-                if (tiles[xx + (yy * WIDTH)] instanceof WallTile) {
-                    Game.minimapPixels[xx + (yy * WIDTH)] = 0xFF30DDCC;
-                } else {
-                    Game.minimapPixels[xx + (yy * WIDTH)] = 0;
+                Tile tile = tiles[xx + (yy * WIDTH)];
+                if (tile instanceof WallTile) {
+                    Game.minimapPixels[xx + (yy * WIDTH)] = 0xBB323c39;
+                    continue;
+                }
+                if (tile instanceof GrassTile) {
+                    Game.minimapPixels[xx + (yy * WIDTH)] = 0xBB000000;
+                    continue;
+                }
+
+            }
+        }
+
+        if (Game.player.getLife() > 0) {
+            int xx = (int) Game.player.getX() / 16;
+            int yy = (int) Game.player.getY() / 16;
+            Game.minimapPixels[xx + (yy * WIDTH)] = 0xBB00FF00;
+        }
+
+        if (Game.entities.toArray().length > 0) {
+            for (int i = 0; i < Game.entities.toArray().length; i++) {
+                Entity e = Game.entities.get(i);
+                int xx = (int) e.getX() / 16;
+                int yy = (int) e.getY() / 16;
+                if (e instanceof Enemy) {
+                    Game.minimapPixels[xx + (yy * WIDTH)] = 0xBBFF0000;
+                } else if (e instanceof LifePack) {
+                    Game.minimapPixels[xx + (yy * WIDTH)] = 0xBBFFFFFF;
+                } else if (e instanceof LifeUp) {
+                    Game.minimapPixels[xx + (yy * WIDTH)] = 0xBB56a20e;
+                } else if (e instanceof PowerAmmo) {
+                    Game.minimapPixels[xx + (yy * WIDTH)] = 0xBB4d6bc0;
+                } else if (e instanceof Stamina) {
+                    Game.minimapPixels[xx + (yy * WIDTH)] = 0xBBfbf236;
                 }
             }
         }
+
     }
 
     // public boolean isCollided() {

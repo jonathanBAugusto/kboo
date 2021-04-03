@@ -26,7 +26,7 @@ public class GameCore extends Canvas {
     protected boolean isRunning, saveGame = false;
     public static final int WIDTH = 240;
     public static final int HEIGHT = 160;
-    public static final int SCALE = 3;
+    public static final int SCALE = 4;
 
     protected BufferedImage image;
     protected GameState gameState = GameState.MENU;

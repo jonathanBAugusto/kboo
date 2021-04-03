@@ -88,7 +88,11 @@ public class AStar {
                 int y = current.tile.y;
                 int xi = (i % 3) - 1;
                 int yi = (i / 3) - 1;
-                Tile tile = World.tiles[x + xi + ((y + yi) * World.WIDTH)];
+                int tilePosition = x + xi + ((y + yi) * World.WIDTH);
+                if (tilePosition > World.tiles.length || tilePosition < 0) {
+                    continue;
+                }
+                Tile tile = World.tiles[tilePosition];
                 if (tile == null)
                     continue;
                 if (tile instanceof WallTile)
