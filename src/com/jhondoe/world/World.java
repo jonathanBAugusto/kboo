@@ -30,28 +30,29 @@ public class World {
         WIDTH = 25;
         HEIGHT = 25;
         tiles = new Tile[WIDTH * HEIGHT];
-
-        int dir = 0, xx = 0, yy = 0;
         for (int x1 = 0; x1 < WIDTH; x1++) {
             for (int y1 = 0; y1 < HEIGHT; y1++) {
+                tiles[x1 + (y1 * WIDTH)] = new WallTile(x1 * Tile.WIDTH, y1 * Tile.HEIGHT, Tile.TILE_WALL_CRACKED);
                 int rand = Game.rand.nextInt(100);
+
                 if (rand >= 30) {
                     tiles[x1 + (y1 * WIDTH)] = new WallTile(x1 * Tile.WIDTH, y1 * Tile.HEIGHT, Tile.TILE_WALL_CRACKED);
                 } else {
-                    tiles[x1 + (y1 * WIDTH)] = new WallTile(x1 * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_WALL);
+                    tiles[x1 + (y1 * WIDTH)] = new WallTile(x1 * Tile.WIDTH, y1 * Tile.HEIGHT, Tile.TILE_WALL);
                 }
 
             }
         }
 
+        int dir = 0, xx = 1, yy = 1;
+
+        if (Game.rand.nextInt(200) > 50) {
+            tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS_ROCK);
+        } else {
+            tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS);
+        }
+
         for (int i = 0; i < (WIDTH * HEIGHT); i++) {
-            if (yy == 1 && xx == 1) {
-                if (Game.rand.nextInt(200) > 50) {
-                    tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS_ROCK);
-                } else {
-                    tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS);
-                }
-            }
 
             if (dir == 0 && xx < WIDTH) {
                 xx++;
@@ -67,61 +68,17 @@ public class World {
                 dir = Game.rand.nextInt(4);
             }
 
-            if (yy == 0 || xx == 0 || yy == HEIGHT - 1 || xx == WIDTH - 1) {
+            if (yy == HEIGHT - 1 || xx == WIDTH - 1) {
                 continue;
             }
-            // if ((xx + (yy * WIDTH)) > 0 && (xx + (yy * WIDTH)) < WIDTH * HEIGHT) {
-            // if (Game.rand.nextInt(200) > 50) {
-            // tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT,
-            // Tile.TILE_GRASS_ROCK);
-            // } else {
-            // tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT,
-            // Tile.TILE_GRASS);
-            // }
-            // }
-            int pos1 = 0, pos2 = 0, pos3 = 0;
-            int xx1 = xx, xx3 = xx, yy1 = yy, yy3 = yy;
-            if (dir == 0 || dir == 1) {
-                yy1 = yy - 1;
-                yy3 = yy + 1;
-                pos1 = xx + (yy - 1 * WIDTH);
-                pos2 = xx + (yy * WIDTH);
-                pos3 = xx + (yy + 1 * WIDTH);
-            } else if (dir == 2 || dir == 3) {
-                xx1 = xx - 1;
-                xx3 = xx + 1;
-                pos1 = (xx - 1) + (yy * WIDTH);
-                pos2 = xx + (yy * WIDTH);
-                pos3 = (xx + 1) + (yy * WIDTH);
-            }
 
-            // if (pos1 > 0 && pos1 < WIDTH * HEIGHT) {
-            // if (Game.rand.nextInt(200) > 50) {
-            // tiles[pos1] = new GrassTile(xx1 * Tile.WIDTH, yy1 * Tile.HEIGHT,
-            // Tile.TILE_GRASS_ROCK);
-            // } else {
-            // tiles[pos1] = new GrassTile(xx1 * Tile.WIDTH, yy1 * Tile.HEIGHT,
-            // Tile.TILE_GRASS);
-            // }
-            // }
-
-            if (pos2 > 0 && pos2 < WIDTH * HEIGHT) {
+            if ((xx + (yy * WIDTH)) > 0 && (xx + (yy * WIDTH)) < WIDTH * HEIGHT) {
                 if (Game.rand.nextInt(200) > 50) {
-                    tiles[pos2] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS_ROCK);
+                    tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS_ROCK);
                 } else {
-                    tiles[pos2] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS);
+                    tiles[xx + (yy * WIDTH)] = new GrassTile(xx * Tile.WIDTH, yy * Tile.HEIGHT, Tile.TILE_GRASS);
                 }
             }
-
-            // if (pos3 > 0 && pos3 < WIDTH * HEIGHT) {
-            // if (Game.rand.nextInt(200) > 50) {
-            // tiles[pos3] = new GrassTile(xx3 * Tile.WIDTH, yy3 * Tile.HEIGHT,
-            // Tile.TILE_GRASS_ROCK);
-            // } else {
-            // tiles[pos3] = new GrassTile(xx3 * Tile.WIDTH, yy3 * Tile.HEIGHT,
-            // Tile.TILE_GRASS);
-            // }
-            // }
         }
     }
 

@@ -1,16 +1,22 @@
 package com.jhondoe.main.game;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.awt.Point;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.jhondoe.common.F;
@@ -49,6 +55,25 @@ public class Game extends GameListener {
 		rand = new Random();
 	}
 
+	private void customPointer(JFrame frame) {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage(getClass().getResource("/pointer-crosshair.png"));
+		if (image != null) {
+			Cursor c = toolkit.createCustomCursor(image, new Point(15, 15), "pointer");
+			frame.setCursor(c);
+		}
+	}
+
+	private void customIcon(JFrame frame) {
+		Image image = null;
+		try {
+			image = ImageIO.read(getClass().getResource("/icon.png"));
+			frame.setIconImage(image);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void initEntities() {
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
@@ -63,8 +88,8 @@ public class Game extends GameListener {
 		player = new Player(0, 0, Tile.WIDTH, Tile.HEIGHT, playerSheet.getSprite(0, 48, Tile.WIDTH, Tile.HEIGHT));
 		gameUi = new UI();
 		entities.add(player);
-		// world = new World("/map" + (currentLevel + 1) + ".png");
-		world = new World();
+		world = new World("/map" + (currentLevel + 1) + ".png");
+		// world = new World();
 		minimapImage = new BufferedImage(World.WIDTH, World.HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		minimapPixels = ((DataBufferInt) minimapImage.getRaster().getDataBuffer()).getData();
 	}
@@ -74,6 +99,8 @@ public class Game extends GameListener {
 		frame.add(this);
 		frame.setResizable(false);
 		frame.pack();
+		customPointer(frame);
+		customIcon(frame);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -116,11 +143,11 @@ public class Game extends GameListener {
 		}
 
 		if (enemies.size() == 0) {
-			// sumCurrentLevel(1);
-			// if (getCurrentLevel() >= maxLevel) {
-			// setCurrentLevel(0);
-			// }
-			// initEntities();
+			sumCurrentLevel(1);
+			if (getCurrentLevel() >= maxLevel) {
+				setCurrentLevel(0);
+			}
+			initEntities();
 		}
 	}
 
